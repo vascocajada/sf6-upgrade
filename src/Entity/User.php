@@ -11,13 +11,16 @@ use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
+ *
  * @ORM\Table(name="`user`")
  */
 class User implements UserInterface
 {
     /**
      * @ORM\Id
+     *
      * @ORM\GeneratedValue
+     *
      * @ORM\Column(type="integer")
      */
     private $id;
@@ -34,6 +37,7 @@ class User implements UserInterface
 
     /**
      * @var string The hashed password
+     *
      * @ORM\Column(type="string")
      */
     private $password;
@@ -41,7 +45,7 @@ class User implements UserInterface
     /**
      * @var string Non-mapped field
      */
-    private $plainPassword = null;
+    private $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=255)
