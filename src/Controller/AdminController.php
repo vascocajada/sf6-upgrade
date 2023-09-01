@@ -10,10 +10,8 @@ use Symfony\UX\Chartjs\Model\Chart;
 
 class AdminController extends AbstractController
 {
-    /**
-     * @Route("/admin", name="admin_dashboard")
-     */
-    public function dashboard(ChartBuilderInterface $chartBuilder): Response
+    #[Route(path: '/admin', name: 'admin_dashboard')]
+    public function dashboard(ChartBuilderInterface $chartBuilder) : Response
     {
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
         $chart->setData([
@@ -31,7 +29,6 @@ class AdminController extends AbstractController
                 ],
             ],
         ]);
-
         $chart2 = $chartBuilder->createChart(Chart::TYPE_PIE);
         $chart2->setData([
             'labels' => ['Self-Vanishing', 'Miniaturization', 'Clown Feet', 'Poor Musical Taste'],
@@ -48,28 +45,22 @@ class AdminController extends AbstractController
                 ],
             ],
         ]);
-
         return $this->render('admin/dashboard.html.twig', [
             'chart' => $chart,
             'chart2' => $chart2,
         ]);
     }
 
-    /**
-     * @Route("/admin/login")
-     */
+    #[Route(path: '/admin/login')]
     public function adminLogin()
     {
         return new Response('Pretend admin login page, that should be public');
     }
 
-    /**
-     * @Route("/admin/comments")
-     */
+    #[Route(path: '/admin/comments')]
     public function adminComments()
     {
         $this->denyAccessUnlessGranted('ROLE_COMMENT_ADMIN');
-
         return new Response('Pretend comments admin page');
     }
 }

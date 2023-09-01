@@ -20,73 +20,55 @@ class QuestionController extends AbstractController
     {
     }
 
-    /**
-     * @Route("/{page<\d+>}", name="app_homepage")
-     */
-    public function homepage(QuestionRepository $repository, int $page = 1): Response
+    #[Route(path: '/{page<\d+>}', name: 'app_homepage')]
+    public function homepage(QuestionRepository $repository, int $page = 1) : Response
     {
         $queryBuilder = $repository->createAskedOrderedByNewestQueryBuilder();
-
         $pagerfanta = new Pagerfanta(new QueryAdapter($queryBuilder));
         $pagerfanta->setMaxPerPage(5);
         $pagerfanta->setCurrentPage($page);
-
         return $this->render('question/homepage.html.twig', [
             'pager' => $pagerfanta,
         ]);
     }
 
-    /**
-     * @Route("/questions/new")
-     *
-     * @IsGranted("ROLE_USER")
-     */
+    #[Route(path: '/questions/new')]
+    #[IsGranted('ROLE_USER')]
     public function new()
     {
         return new Response('Sounds like a GREAT feature for V2!');
     }
 
-    /**
-     * @Route("/questions/{slug}", name="app_question_show")
-     */
-    public function show(Question $question): Response
+    #[Route(path: '/questions/{slug}', name: 'app_question_show')]
+    public function show(Question $question) : Response
     {
         if ($this->isDebug) {
             $this->logger->info('We are in debug mode!');
         }
-
         return $this->render('question/show.html.twig', [
             'question' => $question,
         ]);
     }
 
-    /**
-     * @Route("/questions/edit/{slug}", name="app_question_edit")
-     */
-    public function edit(Question $question): Response
+    #[Route(path: '/questions/edit/{slug}', name: 'app_question_edit')]
+    public function edit(Question $question) : Response
     {
         $this->denyAccessUnlessGranted('EDIT', $question);
-
         return $this->render('question/edit.html.twig', [
             'question' => $question,
         ]);
     }
 
-    /**
-     * @Route("/questions/{slug}/vote", name="app_question_vote", methods="POST")
-     */
-    public function questionVote(Question $question, Request $request, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\RedirectResponse
+    #[Route(path: '/questions/{slug}/vote', name: 'app_question_vote', methods: 'POST')]
+    public function questionVote(Question $question, Request $request, EntityManagerInterface $entityManager) : \Symfony\Component\HttpFoundation\RedirectResponse
     {
         $direction = $request->request->get('direction');
-
         if ($direction === 'up') {
             $question->upVote();
         } elseif ($direction === 'down') {
             $question->downVote();
         }
-
         $entityManager->flush();
-
         return $this->redirectToRoute('app_question_show', [
             'slug' => $question->getSlug(),
         ]);

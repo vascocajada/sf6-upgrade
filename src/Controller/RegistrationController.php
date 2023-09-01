@@ -16,15 +16,12 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 class RegistrationController extends AbstractController
 {
-    /**
-     * @Route("/register", name="app_register")
-     */
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, VerifyEmailHelperInterface $verifyEmailHelper): Response
+    #[Route(path: '/register', name: 'app_register')]
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, VerifyEmailHelperInterface $verifyEmailHelper) : Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             // encode the plain password
             $user->setPassword(
@@ -54,22 +51,18 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_homepage');
         }
-
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
 
-    /**
-     * @Route("/verify", name="app_verify_email")
-     */
-    public function verifyUserEmail(Request $request, VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
+    #[Route(path: '/verify', name: 'app_verify_email')]
+    public function verifyUserEmail(Request $request, VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository, EntityManagerInterface $entityManager) : Response
     {
         $user = $userRepository->find($request->query->get('id'));
         if (!$user) {
             throw $this->createNotFoundException();
         }
-
         try {
             $verifyEmailHelper->validateEmailConfirmation(
                 $request->getUri(),
@@ -81,19 +74,14 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_register');
         }
-
         $user->setIsVerified(true);
         $entityManager->flush();
-
         $this->addFlash('success', 'Account Verified! You can now log in.');
-
         return $this->redirectToRoute('app_login');
     }
 
-    /**
-     * @Route("/verify/resend", name="app_verify_resend_email")
-     */
-    public function resendVerifyEmail(): Response
+    #[Route(path: '/verify/resend', name: 'app_verify_resend_email')]
+    public function resendVerifyEmail() : Response
     {
         return $this->render('registration/resend_verify_email.html.twig');
     }
