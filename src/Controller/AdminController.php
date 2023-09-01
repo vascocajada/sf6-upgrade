@@ -11,7 +11,7 @@ use Symfony\UX\Chartjs\Model\Chart;
 class AdminController extends AbstractController
 {
     #[Route(path: '/admin', name: 'admin_dashboard')]
-    public function dashboard(ChartBuilderInterface $chartBuilder) : Response
+    public function dashboard(ChartBuilderInterface $chartBuilder): Response
     {
         $chart = $chartBuilder->createChart(Chart::TYPE_LINE);
         $chart->setData([
@@ -45,6 +45,7 @@ class AdminController extends AbstractController
                 ],
             ],
         ]);
+
         return $this->render('admin/dashboard.html.twig', [
             'chart' => $chart,
             'chart2' => $chart2,
@@ -61,6 +62,7 @@ class AdminController extends AbstractController
     public function adminComments()
     {
         $this->denyAccessUnlessGranted('ROLE_COMMENT_ADMIN');
+
         return new Response('Pretend comments admin page');
     }
 }

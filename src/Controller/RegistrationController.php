@@ -17,7 +17,7 @@ use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 class RegistrationController extends AbstractController
 {
     #[Route(path: '/register', name: 'app_register')]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, VerifyEmailHelperInterface $verifyEmailHelper) : Response
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, VerifyEmailHelperInterface $verifyEmailHelper): Response
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
@@ -51,13 +51,14 @@ class RegistrationController extends AbstractController
 
             return $this->redirectToRoute('app_homepage');
         }
+
         return $this->render('registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
     }
 
     #[Route(path: '/verify', name: 'app_verify_email')]
-    public function verifyUserEmail(Request $request, VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository, EntityManagerInterface $entityManager) : Response
+    public function verifyUserEmail(Request $request, VerifyEmailHelperInterface $verifyEmailHelper, UserRepository $userRepository, EntityManagerInterface $entityManager): Response
     {
         $user = $userRepository->find($request->query->get('id'));
         if (!$user) {
@@ -77,11 +78,12 @@ class RegistrationController extends AbstractController
         $user->setIsVerified(true);
         $entityManager->flush();
         $this->addFlash('success', 'Account Verified! You can now log in.');
+
         return $this->redirectToRoute('app_login');
     }
 
     #[Route(path: '/verify/resend', name: 'app_verify_resend_email')]
-    public function resendVerifyEmail() : Response
+    public function resendVerifyEmail(): Response
     {
         return $this->render('registration/resend_verify_email.html.twig');
     }

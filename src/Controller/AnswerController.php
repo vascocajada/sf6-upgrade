@@ -13,11 +13,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class AnswerController extends BaseController
 {
     #[Route(path: '/answers/popular', name: 'app_popular_answers')]
-    public function popularAnswers(AnswerRepository $answerRepository, Request $request) : \Symfony\Component\HttpFoundation\Response
+    public function popularAnswers(AnswerRepository $answerRepository, Request $request): \Symfony\Component\HttpFoundation\Response
     {
         $answers = $answerRepository->findMostPopular(
             $request->get('q')
         );
+
         return $this->render('answer/popularAnswers.html.twig', [
             'answers' => $answers,
         ]);
@@ -25,7 +26,7 @@ class AnswerController extends BaseController
 
     #[Route(path: '/answers/{id}/vote', methods: 'POST', name: 'answer_vote')]
     #[IsGranted('IS_AUTHENTICATED_REMEMBERED')]
-    public function answerVote(Answer $answer, LoggerInterface $logger, Request $request, EntityManagerInterface $entityManager) : \Symfony\Component\HttpFoundation\JsonResponse
+    public function answerVote(Answer $answer, LoggerInterface $logger, Request $request, EntityManagerInterface $entityManager): \Symfony\Component\HttpFoundation\JsonResponse
     {
         $logger->info('{user} is voting on answer {answer}!', [
             'user' => $this->getUser()->getEmail(),
@@ -42,6 +43,7 @@ class AnswerController extends BaseController
             $answer->setVotes($answer->getVotes() - 1);
         }
         $entityManager->flush();
+
         return $this->json(['votes' => $answer->getVotes()]);
     }
 }
