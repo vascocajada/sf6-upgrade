@@ -40,10 +40,10 @@ class Question
 
     #[ORM\OneToMany(targetEntity: Answer::class, mappedBy: 'question', fetch: 'EXTRA_LAZY')]
     #[ORM\OrderBy(['createdAt' => 'DESC'])]
-    private \Doctrine\Common\Collections\ArrayCollection|array $answers;
+    private Collection|array $answers;
 
     #[ORM\OneToMany(targetEntity: QuestionTag::class, mappedBy: 'question')]
-    private \Doctrine\Common\Collections\ArrayCollection|array $questionTags;
+    private Collection|array $questionTags;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'questions')]
     #[ORM\JoinColumn(nullable: false)]
