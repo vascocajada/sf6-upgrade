@@ -35,7 +35,7 @@ class QuestionController extends AbstractController
 
     #[Route(path: '/questions/new')]
     #[IsGranted('ROLE_USER')]
-    public function new()
+    public function new(): \Symfony\Component\HttpFoundation\Response
     {
         return new Response('Sounds like a GREAT feature for V2!');
     }

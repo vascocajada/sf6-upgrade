@@ -53,13 +53,13 @@ class AdminController extends AbstractController
     }
 
     #[Route(path: '/admin/login')]
-    public function adminLogin()
+    public function adminLogin(): \Symfony\Component\HttpFoundation\Response
     {
         return new Response('Pretend admin login page, that should be public');
     }
 
     #[Route(path: '/admin/comments')]
-    public function adminComments()
+    public function adminComments(): \Symfony\Component\HttpFoundation\Response
     {
         $this->denyAccessUnlessGranted('ROLE_COMMENT_ADMIN');
 
